@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(indexRouter);
+app.use("/api", indexRouter);
 
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`);
