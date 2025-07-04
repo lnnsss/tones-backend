@@ -1,6 +1,6 @@
 import {Router} from "express";
 import AuthController from "../controllers/auth-controller.mjs";
-import {registerValidation} from "../middlewares/auth-middleware.mjs";
+import {registerValidation} from "../middlewares/register-validation.mjs";
 
 const router = new Router();
 
