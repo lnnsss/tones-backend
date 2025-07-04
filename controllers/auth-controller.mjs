@@ -16,7 +16,8 @@ export default class AuthController {
                 return res.status(400).json({ message: errors.array()[0].msg });
             }
 
-            const { email, password, name, surname, sex, birthday, isAdmin } = req.body;
+            const { email, password, name, surname, sex, birthdate, isAdmin } = req.body;
+            console.log(req.body)
 
             const existingUser = await db.query(`SELECT * FROM users WHERE email = $1`, [email]);
             if (existingUser.rows.length) {
@@ -24,14 +25,15 @@ export default class AuthController {
                     message: "Пользователь с таким email уже зарегистрирован на сайте",
                 })
             }
+            console.log(existingUser)
 
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt);
 
             const user = await db.query(
-                `INSERT INTO users (email, password_hash, name, surname, sex, birthday, avatar, is_admin) 
+                `INSERT INTO users (email, password_hash, name, surname, sex, birthdate, avatar, is_admin) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-                [email, hash, name, surname, sex, birthday, null, isAdmin === true]
+                [email, hash, name, surname, sex, birthdate, null, isAdmin === true]
             );
 
             const token = jwt.sign(
@@ -52,6 +54,7 @@ export default class AuthController {
             })
 
         } catch (error) {
+            console.log(error)
             return res.status(400).json({ message: "Ошибка регистрации", error })
         }
     }
