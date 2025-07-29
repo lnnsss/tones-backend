@@ -5,9 +5,14 @@ import {isAdmin, isSelfOrAdmin} from "../middlewares/access-control.mjs";
 
 const router = express.Router();
 
-// Получить всех пользователей
+// Получить информацию о себе
+router.get("/getInfo", authMiddleware, UserController.getInfo);
+
+// Получить всех пользователей / Админ
 router.get("/", authMiddleware, isAdmin, UserController.getAllUsers);
-// Получить пользователя по ID
+
+// Получить пользователя по ID / Админ или пользователь
 router.get("/:id", authMiddleware, isSelfOrAdmin, UserController.getUserById);
+
 
 export default router;
